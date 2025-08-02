@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Commandez votre boisson</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap">
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Roboto', sans-serif;
+      background: linear-gradient(180deg, #fffaf5, #8c83eee9);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 200vh;
+    }
+
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem 1rem 1rem 1rem;
+      gap: 1rem;
+    }
+
+    header h1 {
+      font-size: 2rem;
+      color: #000000;
+      text-align: center;
+      margin: 0;
+    }
+
+    header img {
+      width: 32px;
+      height: 32px;
+    }
+
+    .box {
+      padding: 2rem;
+      border-radius: 0.25rem;
+      box-shadow: 0 0px 19px rgba(0, 0, 0, 0.08);
+      width: 90%;
+      max-width: 500px;
+      margin-bottom: 2rem;
+    }
+
+    .item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1.5rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid #221035;
+    }
+
+    .item-left {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .item-name {
+      font-weight: bold;
+      color: #a0380eb8;
+      min-width: 100px;
+    }
+
+    select {
+      padding: 0.4rem 0.6rem;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      font-size: 1rem;
+      background-color: #fdf8f3;
+      color: #4e342e;
+    }
+
+    .type-select {
+      min-width: 120px;
+    }
+
+    .qty-select {
+      width: 60px;
+      text-align: center;
+    }
+
+    button {
+      margin-top: 2rem;
+      width: 100%;
+      background-color: #a0522d;
+      color: white;
+      border: none;
+      border-radius: 12px;
+      padding: 0.9rem;
+      font-size: 1.1rem;
+      font-weight: bold;
+      cursor: pointer;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      transition: background-color 0.3s ease, transform 0.2s ease;
+    }
+
+    button:hover {
+      background-color: #96431f;
+      transform: scale(1.02);
+    }
+
+    .recap {
+      display: none;
+      margin-top: 2rem;
+      background: #fff7f0;
+      border: 1px solid #e0cfc2;
+      padding: 1.5rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    }
+
+    .recap h3 {
+      color: #4e342e;
+      margin-bottom: 1rem;
+    }
+
+    .recap ul {
+      padding-left: 1.2rem;
+      color: #5c4033;
+    }
+
+    #confirmation-modal {
+      visibility: hidden;
+      opacity: 0;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      transition: visibility 0s, opacity 0.3s ease;
+    }
+
+    #confirmation-modal.active {
+      visibility: visible;
+      opacity: 1;
+    }
+
+    #confirmation-modal .modal-content {
+      background: white;
+      padding: 2rem;
+      border-radius: 1rem;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+      text-align: center;
+      max-width: 80%;
+    }
+
+    #confirmation-modal .modal-content button {
+      margin-top: 1rem;
+      width: auto;
+    }
+  </style>
+</head>
+<body><header>
+  <img src="https://img.icons8.com/ios-filled/50/coffee.png" alt="logo gauche">
+  <h1>Commandez votre boisson</h1>
+  <img src="https://img.icons8.com/ios-filled/50/coffee-to-go.png" alt="logo droit">
+</header>
+
+
+  <div class="box" id="commande-box">
+    <div class="item">
+      <div class="item-left">
+        <span class="item-name">Café</span>
+        <select id="cafe-type" class="type-select">
+          <option value="Normal">Normal</option>
+          <option value="Double">Double</option>
+        </select>
+      </div>
+      <select id="qty-cafe" class="qty-select">
+        <option value="0">0</option>
+        <option value="1">1</option>
+      </select>
+    </div>
+
+    <div class="item">
+      <div class="item-left">
+        <span class="item-name">Cappuccino</span>
+        <select id="cappuccino-type" class="type-select">
+          <option value="Caramel">Caramel</option>
+          <option value="Praliné">Praliné</option>
+        </select>
+      </div>
+      <select id="qty-cappuccino" class="qty-select">
+        <option value="0">0</option>
+        <option value="1">1</option>
+      </select>
+    </div>
+
+    <div class="item">
+      <div class="item-left">
+        <span class="item-name">Infusion</span>
+      </div>
+      <select id="qty-infusion" class="qty-select">
+        <option value="0">0</option>
+        <option value="1">1</option>
+      </select>
+    </div>
+
+    <button onclick="showRecap()">Commander</button>
+  </div>
+
+  <div class="recap" id="recap-box">
+    <h3>Récapitulatif de votre commande :</h3>
+    <ul id="recap-list"></ul>
+    <button onclick="validerCommande()">Valider ma commande</button>
+  </div>
+
+  <div id="confirmation-modal">
+    <div class="modal-content">
+      <h3>Commande envoyée au serveur !</h3>
+      <button onclick="closeModal()">OK</button>
+    </div>
+  </div>
+
+  <script>
+    function showRecap() {
+      const cafeType = document.getElementById("cafe-type").value;
+      const cafeQty = parseInt(document.getElementById("qty-cafe").value);
+      const cappuccinoType = document.getElementById("cappuccino-type").value;
+      const cappuccinoQty = parseInt(document.getElementById("qty-cappuccino").value);
+      const infusionQty = parseInt(document.getElementById("qty-infusion").value);
+
+      const recapList = document.getElementById("recap-list");
+      recapList.innerHTML = "";
+      if (cafeQty > 0) {
+        recapList.innerHTML += `<li>${cafeQty} × Café (${cafeType})</li>`;
+      }
+      if (cappuccinoQty > 0) {
+        recapList.innerHTML += `<li>${cappuccinoQty} × Cappuccino (${cappuccinoType})</li>`;
+      }
+      if (infusionQty > 0) {
+        recapList.innerHTML += `<li>${infusionQty} × Infusion</li>`;
+      }
+
+      document.getElementById("commande-box").style.display = "none";
+      document.getElementById("recap-box").style.display = "block";
+    }
+
+    function validerCommande() {
+      const modal = document.getElementById("confirmation-modal");
+      modal.classList.add("active");
+    }
+
+    function closeModal() {
+      const modal = document.getElementById("confirmation-modal");
+      modal.classList.remove("active");
+      document.getElementById("commande-box").style.display = "block";
+      document.getElementById("recap-box").style.display = "none";
+    }
+  </script>
+</body>
+</html>
